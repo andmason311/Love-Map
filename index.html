@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Gottman Love Map 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;700&family=Shippori+Mincho:wght@400;600&family=Zen+Loop&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sakura: #f7c5d0;
+    --sakura-deep: #e8879a;
+    --petal: #fce8ed;
+    --moss: #b5c9a1;
+    --moss-deep: #7a9e65;
+    --sky-light: #c8e8f8;
+    --sky-mid: #a0cfe8;
+    --sky-deep: #78b8d8;
+    --cream: #fdf6f0;
+    --fog: #f5f0eb;
+    --ink: #3a2e35;
+    --ink-soft: #6b5460;
+    --gold: #e8c88a;
+    --lavender: #c8b8d8;
+    --white-pearl: #fefcfa;
+    --card-pink: #fff0f4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    background: linear-gradient(180deg, #b8dff0 0%, #cce8f5 30%, #ddf0fa 60%, #eaf6fd 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Leaf canvas (behind everything) ── */
+  #leaf-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(200,232,248,0.82);
+    backdrop-filter: blur(14px);
+    border-bottom: 1.5px solid rgba(247,197,208,0.7);
+    padding: 0.6rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  nav .logo {
+    font-family: 'Zen Loop', cursive;
+    font-size: 1.3rem;
+    color: var(--sakura-deep);
+    margin-right: 1rem;
+    white-space: nowrap;
+  }
+
+  nav a {
+    text-decoration: none;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    transition: all 0.25s;
+    white-space: nowrap;
+  }
+  nav a:hover {
+    background: var(--petal);
+    border-color: var(--sakura);
+    color: var(--sakura-deep);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 7rem 2rem 3rem;
+    text-align: center;
+  }
+
+  .kitty-face {
+    display: inline-block;
+    width: 120px;
+    height: 110px;
+    position: relative;
+    margin-bottom: 1.5rem;
+    animation: float 4s ease-in-out infinite;
+    filter: drop-shadow(0 6px 18px rgba(232,135,154,0.25));
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-10px); }
+  }
+
+  .hero h1 {
+    font-family: 'Zen Loop', cursive;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--sakura-deep);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 12px rgba(232,135,154,0.2);
+  }
+
+  .hero .subtitle {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 2rem;
+    margin: 1rem 0;
+    opacity: 0.6;
+    position: relative;
+    z-index: 1;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--sakura), transparent);
+  }
+  .divider span { font-size: 0.9rem; color: var(--sakura-deep); }
+
+  /* ── Main content ── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 1rem 2rem 6rem;
+  }
+
+  /* ── Section card ── */
+  .section-card {
+    background: var(--card-pink);
+    border: 1.5px solid var(--sakura);
+    border-radius: 24px;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.3s, transform 0.2s;
+    box-shadow: 0 4px 20px rgba(232,135,154,0.08);
+  }
+  .section-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: var(--section-accent, linear-gradient(90deg, var(--sakura), var(--lavender)));
+    border-radius: 24px 24px 0 0;
+  }
+  .section-card:hover {
+    box-shadow: 0 10px 36px rgba(232,135,154,0.16);
+    transform: translateY(-2px);
+  }
+
+  #identity      { --section-accent: linear-gradient(90deg, #f7c5d0, #c8b8d8); }
+  #daily         { --section-accent: linear-gradient(90deg, #a0cfe8, #b8dff0); }
+  #relationships { --section-accent: linear-gradient(90deg, #b5c9a1, #e8c88a); }
+  #inner         { --section-accent: linear-gradient(90deg, #c8b8d8, #f7c5d0); }
+  #history       { --section-accent: linear-gradient(90deg, #e8c88a, #b5c9a1); }
+  #hopes         { --section-accent: linear-gradient(90deg, #a0cfe8, #c8b8d8); }
+  #loves         { --section-accent: linear-gradient(90deg, #f7c5d0, #b5c9a1); }
+  #wants         { --section-accent: linear-gradient(90deg, #c8b8d8, #a0cfe8); }
+
+  .section-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .section-card h2 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.5rem;
+    color: var(--sakura-deep);
+    margin-bottom: 1.4rem;
+    font-weight: 600;
+  }
+
+  /* ── Subsections ── */
+  .subsection { margin-bottom: 1.8rem; }
+  .subsection:last-child { margin-bottom: 0; }
+
+  .subsection h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--moss-deep);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .subsection h3::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--moss);
+    opacity: 0.5;
+  }
+
+  /* ── Text areas ── */
+  .note-area {
+    width: 100%;
+    min-height: 100px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(181,201,161,0.5);
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    line-height: 1.8;
+    resize: vertical;
+    transition: border-color 0.2s, background 0.2s;
+    outline: none;
+  }
+  .note-area:focus {
+    border-color: var(--sakura-deep);
+    background: rgba(255,255,255,0.95);
+  }
+  .note-area::placeholder {
+    color: var(--ink-soft);
+    opacity: 0.45;
+    font-style: italic;
+  }
+
+  /* tag input row */
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(181,201,161,0.5);
+    border-radius: 14px;
+    min-height: 48px;
+    cursor: text;
+  }
+  .tag {
+    background: var(--petal);
+    border: 1px solid var(--sakura);
+    border-radius: 20px;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.8rem;
+    color: var(--sakura-deep);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    animation: popIn 0.2s ease;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  .tag .remove {
+    cursor: pointer;
+    opacity: 0.5;
+    font-size: 0.75rem;
+    transition: opacity 0.15s;
+  }
+  .tag .remove:hover { opacity: 1; }
+  .tag-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 0.85rem;
+    color: var(--ink);
+    min-width: 120px;
+    flex: 1;
+  }
+  .tag-input::placeholder { color: var(--ink-soft); opacity: 0.4; font-style: italic; }
+
+  /* ── Progress ring ── */
+  .progress-wrap {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .progress-ring { width: 52px; height: 52px; transform: rotate(-90deg); }
+  .progress-ring circle { fill: none; stroke-width: 4; }
+  .ring-bg { stroke: var(--sakura); opacity: 0.25; }
+  .ring-fill { stroke: var(--sakura-deep); stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+  .progress-pct {
+    font-size: 0.65rem;
+    color: var(--sakura-deep);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-top: -4px;
+  }
+
+  /* ── Save button ── */
+  .save-btn {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: var(--sakura-deep);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 0.7rem 2rem;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    box-shadow: 0 4px 20px rgba(232,135,154,0.4);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .save-btn:hover { transform: translateX(-50%) translateY(-2px); box-shadow: 0 8px 28px rgba(232,135,154,0.5); }
+  .save-btn:active { transform: translateX(-50%) scale(0.97); }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    top: 5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: var(--white-pearl);
+    border: 1.5px solid var(--sakura);
+    border-radius: 20px;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.85rem;
+    color: var(--sakura-deep);
+    opacity: 0;
+    z-index: 200;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── Branch decor ── */
+  .branch-decor {
+    position: absolute;
+    right: -10px;
+    top: 10px;
+    opacity: 0.07;
+    font-size: 5rem;
+    pointer-events: none;
+    transform: rotate(20deg);
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 0.5rem 1rem; }
+    main { padding: 0.5rem 1rem 6rem; }
+    .section-card { padding: 1.5rem; }
+    .save-btn { font-size: 0.8rem; padding: 0.6rem 1.5rem; }
+    .progress-wrap { bottom: 5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Leaf canvas -->
+<canvas id="leaf-canvas"></canvas>
+
+<!-- Navigation -->
+<nav>
+  <span class="logo">🌸 Love Map</span>
+  <a href="#identity">🌷 Identity</a>
+  <a href="#daily">☁️ Daily Life</a>
+  <a href="#relationships">🌿 Bonds</a>
+  <a href="#inner">🌙 Inner World</a>
+  <a href="#history">🍂 Story</a>
+  <a href="#hopes">✨ Hopes</a>
+  <a href="#loves">🌸 Loves</a>
+  <a href="#wants">🌊 Wants</a>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="kitty-face">
+    <svg viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" width="120" height="110">
+      <ellipse cx="28" cy="28" rx="18" ry="20" fill="#fefcfa" stroke="#f7c5d0" stroke-width="2"/>
+      <ellipse cx="92" cy="28" rx="18" ry="20" fill="#fefcfa" stroke="#f7c5d0" stroke-width="2"/>
+      <ellipse cx="28" cy="28" rx="10" ry="12" fill="#f7c5d0"/>
+      <ellipse cx="92" cy="28" rx="10" ry="12" fill="#f7c5d0"/>
+      <ellipse cx="60" cy="65" rx="50" ry="44" fill="#fefcfa" stroke="#f7c5d0" stroke-width="2"/>
+      <ellipse cx="42" cy="58" rx="6" ry="6.5" fill="#3a2e35"/>
+      <ellipse cx="78" cy="58" rx="6" ry="6.5" fill="#3a2e35"/>
+      <circle cx="44" cy="56" r="2" fill="white"/>
+      <circle cx="80" cy="56" r="2" fill="white"/>
+      <ellipse cx="60" cy="69" rx="3.5" ry="2.5" fill="#e8879a"/>
+      <line x1="10" y1="63" x2="50" y2="67" stroke="#b5c9a1" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="8"  y1="70" x2="50" y2="70" stroke="#b5c9a1" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="10" y1="77" x2="50" y2="73" stroke="#b5c9a1" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="110" y1="63" x2="70" y2="67" stroke="#b5c9a1" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="112" y1="70" x2="70" y2="70" stroke="#b5c9a1" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="110" y1="77" x2="70" y2="73" stroke="#b5c9a1" stroke-width="1.2" stroke-linecap="round"/>
+      <polygon points="87,32 98,26 98,38" fill="#e8879a"/>
+      <polygon points="108,32 97,26 97,38" fill="#f7c5d0"/>
+      <circle cx="97.5" cy="32" r="4" fill="#c8b8d8"/>
+      <ellipse cx="38" cy="76" rx="10" ry="6" fill="#f7c5d0" opacity="0.5"/>
+      <ellipse cx="82" cy="76" rx="10" ry="6" fill="#f7c5d0" opacity="0.5"/>
+    </svg>
+  </div>
+  <h1>My Love Map</h1>
+  <p class="subtitle">A living portrait of my inner world</p>
+</header>
+
+<div class="divider"><span>🌸</span></div>
+
+<main>
+
+  <!-- 1. Core Identity -->
+  <section class="section-card" id="identity">
+    <span class="branch-decor">🌸</span>
+    <span class="section-icon">🌷</span>
+    <h2>Core Identity</h2>
+    <div class="subsection">
+      <h3>Values &amp; Beliefs</h3>
+      <textarea class="note-area" placeholder="What principles guide your life? What do you stand for?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Personality Traits</h3>
+      <textarea class="note-area" placeholder="How would you describe yourself? How would your closest friends?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Love Languages</h3>
+      <div class="tag-row" data-placeholder="Type a language + Enter  (e.g. Words of affirmation)"></div>
+    </div>
+    <div class="subsection">
+      <h3>Quirks &amp; Charms</h3>
+      <textarea class="note-area" placeholder="Your little oddities, habits, or things that make you distinctly you…"></textarea>
+    </div>
+  </section>
+
+  <!-- 2. Daily Life -->
+  <section class="section-card" id="daily">
+    <span class="branch-decor">☁️</span>
+    <span class="section-icon">☁️</span>
+    <h2>Daily Life</h2>
+    <div class="subsection">
+      <h3>Current Stressors</h3>
+      <textarea class="note-area" placeholder="What's weighing on you right now? Work, health, relationships, finances?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Daily Routines &amp; Rituals</h3>
+      <textarea class="note-area" placeholder="Morning coffee, evening walks, weekly rituals… what anchors your days?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Work &amp; Career</h3>
+      <textarea class="note-area" placeholder="What do you do? What do you love or struggle with about it?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Recent Wins &amp; Struggles</h3>
+      <textarea class="note-area" placeholder="What are you proud of lately? What's been hard?"></textarea>
+    </div>
+  </section>
+
+  <!-- 3. Relationships -->
+  <section class="section-card" id="relationships">
+    <span class="branch-decor">🌿</span>
+    <span class="section-icon">🌿</span>
+    <h2>Relationships &amp; Bonds</h2>
+    <div class="subsection">
+      <h3>People Who Matter Most</h3>
+      <textarea class="note-area" placeholder="Names, roles, and a line about what they mean to you…"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Family Dynamics</h3>
+      <textarea class="note-area" placeholder="How is your family shaped? What patterns, warmth, or tensions live there?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Friendship Circle</h3>
+      <textarea class="note-area" placeholder="Who are your people? What do these friendships give you?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Role Models &amp; Inspirations</h3>
+      <div class="tag-row" data-placeholder="Name + Enter (e.g. My grandmother)"></div>
+    </div>
+  </section>
+
+  <!-- 4. Inner World -->
+  <section class="section-card" id="inner">
+    <span class="branch-decor">🌙</span>
+    <span class="section-icon">🌙</span>
+    <h2>Inner World</h2>
+    <div class="subsection">
+      <h3>Fears &amp; Insecurities</h3>
+      <textarea class="note-area" placeholder="What secretly scares you? What makes you feel small?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Emotional Triggers</h3>
+      <textarea class="note-area" placeholder="What tends to set you off? What does that feel like?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Pet Peeves</h3>
+      <div class="tag-row" data-placeholder="Type a pet peeve + Enter"></div>
+    </div>
+    <div class="subsection">
+      <h3>Recurring Themes &amp; Dreams</h3>
+      <textarea class="note-area" placeholder="Any patterns in your thoughts, worries, or literal dreams?"></textarea>
+    </div>
+  </section>
+
+  <!-- 5. History & Story -->
+  <section class="section-card" id="history">
+    <span class="branch-decor">🍂</span>
+    <span class="section-icon">🍂</span>
+    <h2>History &amp; Story</h2>
+    <div class="subsection">
+      <h3>Formative Memories</h3>
+      <textarea class="note-area" placeholder="Moments that shaped who you are — big or small…"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Wounds &amp; Traumas</h3>
+      <textarea class="note-area" placeholder="Things that hurt you. Experiences that left a mark. Write what feels right."></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Proudest Achievements</h3>
+      <textarea class="note-area" placeholder="Things you've done that you're genuinely proud of."></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Defining Turning Points</h3>
+      <textarea class="note-area" placeholder="Moments when everything changed. Forks in the road you took."></textarea>
+    </div>
+  </section>
+
+  <!-- 6. Hopes & Dreams -->
+  <section class="section-card" id="hopes">
+    <span class="branch-decor">✨</span>
+    <span class="section-icon">✨</span>
+    <h2>Hopes &amp; Dreams</h2>
+    <div class="subsection">
+      <h3>Life Goals</h3>
+      <textarea class="note-area" placeholder="Big things you want to do or become in this lifetime…"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Bucket List</h3>
+      <div class="tag-row" data-placeholder="Add a dream + Enter (e.g. See the Northern Lights)"></div>
+    </div>
+    <div class="subsection">
+      <h3>Your Ideal Future</h3>
+      <textarea class="note-area" placeholder="Describe your ideal life 5–10 years from now. Where are you? Who are you with?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Legacy</h3>
+      <textarea class="note-area" placeholder="What do you want to leave behind? How do you want to be remembered?"></textarea>
+    </div>
+  </section>
+
+  <!-- 7. Loves & Passions -->
+  <section class="section-card" id="loves">
+    <span class="branch-decor">🌸</span>
+    <span class="section-icon">🌸</span>
+    <h2>Loves &amp; Passions</h2>
+    <div class="subsection">
+      <h3>Hobbies &amp; Interests</h3>
+      <div class="tag-row" data-placeholder="Add a hobby + Enter"></div>
+    </div>
+    <div class="subsection">
+      <h3>Favorite Things</h3>
+      <textarea class="note-area" placeholder="Music that moves you. Foods you love. Places that feel like home. Books, films, memories…"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>What Makes You Come Alive</h3>
+      <textarea class="note-area" placeholder="Moments, activities, or people that make you feel most yourself."></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Guilty Pleasures</h3>
+      <div class="tag-row" data-placeholder="Shhh... add one + Enter"></div>
+    </div>
+  </section>
+
+  <!-- 8. Wants & Needs -->
+  <section class="section-card" id="wants">
+    <span class="branch-decor">🌊</span>
+    <span class="section-icon">🌊</span>
+    <h2>Wants &amp; Needs</h2>
+    <div class="subsection">
+      <h3>What Makes You Feel Loved</h3>
+      <textarea class="note-area" placeholder="In relationships, what actions, words, or gestures fill you up?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Unmet Needs</h3>
+      <textarea class="note-area" placeholder="What do you feel is missing right now — in yourself, your relationships, your life?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Things You're Working Toward</h3>
+      <textarea class="note-area" placeholder="What are you actively trying to grow, change, or build?"></textarea>
+    </div>
+    <div class="subsection">
+      <h3>Non-Negotiables</h3>
+      <div class="tag-row" data-placeholder="Things you must have + Enter (e.g. Alone time to recharge)"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Progress ring -->
+<div class="progress-wrap">
+  <svg class="progress-ring" viewBox="0 0 52 52">
+    <circle class="ring-bg" cx="26" cy="26" r="22"/>
+    <circle class="ring-fill" id="ring" cx="26" cy="26" r="22"
+      stroke-dasharray="138.2"
+      stroke-dashoffset="138.2"/>
+  </svg>
+  <span class="progress-pct" id="pct">0%</span>
+</div>
+
+<button class="save-btn" onclick="saveToMarkdown()">💾 Save as Markdown</button>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════════════════
+   BLOWING LEAF ANIMATION (canvas)
+   ════════════════════════════════════ */
+const canvas = document.getElementById('leaf-canvas');
+const ctx    = canvas.getContext('2d');
+
+function resize() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+/* Leaf shapes — simple SVG-path-like bezier drawn on canvas */
+const LEAF_COLORS = [
+  '#b5c9a1','#8fba78','#c9deb8',  // greens
+  '#e8c88a','#d4a85a',            // golds / autumn
+  '#f7c5d0','#e8879a',            // pink / sakura
+  '#c8dfa0','#a0c870',            // spring greens
+];
+
+function drawLeaf(ctx, x, y, size, angle, color, curl) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+  ctx.scale(size, size);
+
+  ctx.beginPath();
+  // leaf: pointed oval with a slight curve from tip to stem
+  ctx.moveTo(0, -1);
+  ctx.bezierCurveTo( 0.6 + curl*0.2,  -0.5,  0.7,  0.5,  0, 1);
+  ctx.bezierCurveTo(-0.7,  0.5, -0.6 - curl*0.2, -0.5,  0, -1);
+  ctx.closePath();
+
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.82;
+  ctx.fill();
+
+  // mid-vein
+  ctx.beginPath();
+  ctx.moveTo(0, -0.9);
+  ctx.lineTo(0 + curl * 0.15, 0.9);
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+  ctx.lineWidth = 0.06;
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+/* Wind parameters */
+let windX    = 1.2;   // base horizontal drift
+let windGust = 0;     // gust added on top
+
+class Leaf {
+  constructor() { this.reset(true); }
+
+  reset(initial) {
+    this.x    = Math.random() * canvas.width;
+    this.y    = initial ? Math.random() * canvas.height : -30;
+    this.size = 10 + Math.random() * 16;
+    this.speed = 0.6 + Math.random() * 1.2;
+    this.drift = (Math.random() - 0.3) * 0.8;  // slight bias right (wind)
+    this.rot   = Math.random() * Math.PI * 2;
+    this.rotSpeed = (Math.random() - 0.5) * 0.04;
+    this.swing = Math.random() * Math.PI * 2;   // phase for side sway
+    this.swingSpeed = 0.02 + Math.random() * 0.02;
+    this.curl  = (Math.random() - 0.5) * 0.5;
+    this.color = LEAF_COLORS[Math.floor(Math.random() * LEAF_COLORS.length)];
+    this.opacity = 0.5 + Math.random() * 0.45;
+  }
+
+  update() {
+    this.swing += this.swingSpeed;
+    const gust = windX + windGust;
+    this.x += gust + this.drift + Math.sin(this.swing) * 0.8;
+    this.y += this.speed;
+    this.rot += this.rotSpeed + (windGust * 0.005);
+
+    if (this.y > canvas.height + 40 || this.x > canvas.width + 60) {
+      this.reset(false);
+      if (this.x > canvas.width + 60) this.x = -20;
+    }
+  }
+
+  draw() {
+    ctx.globalAlpha = this.opacity;
+    drawLeaf(ctx, this.x, this.y, this.size, this.rot, this.color, this.curl);
+    ctx.globalAlpha = 1;
+  }
+}
+
+const LEAF_COUNT = 38;
+const leaves = Array.from({length: LEAF_COUNT}, () => new Leaf());
+
+/* Occasional wind gusts */
+function scheduleGust() {
+  setTimeout(() => {
+    windGust = 1.5 + Math.random() * 2.5;
+    setTimeout(() => { windGust = 0; scheduleGust(); }, 1500 + Math.random() * 2000);
+  }, 3000 + Math.random() * 6000);
+}
+scheduleGust();
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  leaves.forEach(l => { l.update(); l.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* ════════════════════════════════════
+   TAG INPUT
+   ════════════════════════════════════ */
+document.querySelectorAll('.tag-row').forEach(row => {
+  const ph = row.dataset.placeholder || 'Type + Enter';
+  const inp = document.createElement('input');
+  inp.type = 'text';
+  inp.className = 'tag-input';
+  inp.placeholder = ph;
+  row.appendChild(inp);
+
+  inp.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ',') && inp.value.trim()) {
+      e.preventDefault();
+      addTag(row, inp.value.trim(), inp);
+      inp.value = '';
+      updateProgress();
+    }
+    if (e.key === 'Backspace' && !inp.value) {
+      const tags = row.querySelectorAll('.tag');
+      if (tags.length) tags[tags.length-1].remove();
+      updateProgress();
+    }
+  });
+  row.addEventListener('click', () => inp.focus());
+});
+
+function addTag(row, text, inp) {
+  const tag = document.createElement('span');
+  tag.className = 'tag';
+  tag.innerHTML = text + '<span class="remove" title="remove">✕</span>';
+  tag.querySelector('.remove').onclick = () => { tag.remove(); updateProgress(); };
+  row.insertBefore(tag, inp);
+}
+
+/* ════════════════════════════════════
+   PROGRESS RING
+   ════════════════════════════════════ */
+function updateProgress() {
+  const allInputs = [...document.querySelectorAll('.note-area, .tag-row')];
+  let filled = 0;
+  allInputs.forEach(el => {
+    if (el.tagName === 'TEXTAREA' && el.value.trim().length > 5) filled++;
+    if (el.classList.contains('tag-row') && el.querySelectorAll('.tag').length) filled++;
+  });
+  const pct = Math.round((filled / allInputs.length) * 100);
+  document.getElementById('pct').textContent = pct + '%';
+  const circ = 2 * Math.PI * 22;
+  document.getElementById('ring').style.strokeDashoffset = circ - (circ * pct / 100);
+}
+document.querySelectorAll('.note-area').forEach(t => t.addEventListener('input', updateProgress));
+
+/* ════════════════════════════════════
+   SAVE AS MARKDOWN
+   ════════════════════════════════════ */
+function saveToMarkdown() {
+  const sections = document.querySelectorAll('.section-card');
+  let md = '# My Gottman Love Map\n\n> A living portrait of my inner world\n\n---\n\n';
+
+  sections.forEach(sec => {
+    const title = sec.querySelector('h2').textContent.trim();
+    md += `## ${title}\n\n`;
+    sec.querySelectorAll('.subsection').forEach(sub => {
+      const h = sub.querySelector('h3').textContent.replace(/\s+/g,' ').trim();
+      md += `### ${h}\n\n`;
+      const ta = sub.querySelector('.note-area');
+      if (ta) md += (ta.value.trim() || '*Not yet filled*') + '\n\n';
+      const tags = sub.querySelectorAll('.tag');
+      if (tags.length) {
+        const tagList = [...tags].map(t => t.textContent.replace('✕','').trim()).filter(Boolean);
+        md += tagList.map(t => `- ${t}`).join('\n') + '\n\n';
+      } else if (!ta) {
+        md += '*No items added yet*\n\n';
+      }
+    });
+    md += '---\n\n';
+  });
+
+  md += `\n*Last updated: ${new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'})}*\n`;
+
+  const blob = new Blob([md], {type: 'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'love-map.md';
+  a.click();
+  showToast('🌸 Saved as love-map.md — ready for GitHub!');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ── Smooth scroll ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+updateProgress();
+</script>
+</body>
+</html>
